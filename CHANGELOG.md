@@ -1,3 +1,8 @@
+## Release 1.4.1
+
+* 6e879c8 [bugfix] update rubocop to the latest (#1)
+* d1f941b [bugfix] remove the registered variable and `when` (#54)
+
 ## Release 1.4.0
 
 * bdebcdf [bugfix][feature] introduce fluentd_plugins_to_create (#50)
