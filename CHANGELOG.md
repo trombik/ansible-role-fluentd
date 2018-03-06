@@ -1,3 +1,7 @@
+## Release 1.4.2
+
+* 0429259 [bugfix] QA and follow the latest fluentd plug-in API in the example plug-in (#3)
+
 ## Release 1.4.1
 
 * 6e879c8 [bugfix] update rubocop to the latest (#1)
