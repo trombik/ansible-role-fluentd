@@ -97,7 +97,7 @@ describe file(fluentd_plugin_dir) do
   it { should be_mode 755 }
 end
 
-describe file("#{fluentd_plugin_dir}/example.rb") do
+describe file("#{fluentd_plugin_dir}/in_example.rb") do
   it { should exist }
   it { should be_mode 644 }
   it { should be_file }

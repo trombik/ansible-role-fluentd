@@ -168,8 +168,8 @@ below. The role creates a configuration fragment of `config` under
       - fluent-plugin-redis
       - fluent-plugin-secure-forward
     fluentd_plugins_to_create:
-      - name: example.rb
-        content: "{{ lookup('file', 'files/example.rb') }}"
+      - name: in_example.rb
+        content: "{{ lookup('file', 'files/in_example.rb') }}"
         state: present
     fluentd_ca_cert: |
       -----BEGIN CERTIFICATE-----
@@ -227,9 +227,9 @@ below. The role creates a configuration fragment of `config` under
       example_input:
         enabled: true
         config: |
-          <soruce>
+          <source>
             @type example
-          </soruce>
+          </source>
       listen_on_5140:
         enabled: true
         config: |

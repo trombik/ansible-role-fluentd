@@ -11,7 +11,7 @@ digest2 = Digest::SHA256.hexdigest(Time.new.to_f.to_s)
 context "after provisioning finished" do
   describe server(:client) do
     it "sends digest1 via logger" do
-      result = current_server.ssh_exec(format("logger %s && echo OK", Shellwords.escape(digest1)))
+      result = current_server.ssh_exec(format("logger %<digest>s && echo OK", digest: Shellwords.escape(digest1)))
       expect(result).to match(/OK/)
     end
     it "sends digest2 via unix socket" do

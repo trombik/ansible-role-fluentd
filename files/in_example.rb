@@ -1,11 +1,11 @@
 require "fluent/input"
 
-module Fluentd
+module Fluent
   # An example fluentd plug-in
-  class Example
+  class Example < Input
     Fluent::Plugin.register_input("example", self)
 
-    def configure
+    def configure(conf)
       super
     end
 
