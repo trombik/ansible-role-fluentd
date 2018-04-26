@@ -150,7 +150,7 @@ below. The role creates a configuration fragment of `config` under
 
 # Dependencies
 
-- trombik.language-ruby (OpenBSD, Ubuntu, and RedHat)
+- [trombik.language-ruby](https://github.com/trombik/ansible-role-language-ruby) (OpenBSD, Ubuntu, and RedHat)
 
 # Example Playbook
 
