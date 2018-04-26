@@ -1,3 +1,7 @@
+## Release 1.5.0
+
+* 707f446 [feature][bugfix] Support OpenBSD 6.3, drop EoLed release (#5)
+
 ## Release 1.4.2
 
 * 0429259 [bugfix] QA and follow the latest fluentd plug-in API in the example plug-in (#3)
