@@ -26,7 +26,6 @@ galaxy_info:
     - log
     - logging
     - fluentd
-    - td-agent
 dependencies:
   - role: trombik.language-ruby
     when: ansible_os_family == 'OpenBSD' or ansible_os_family == 'Debian' or ansible_os_family == 'RedHat'
