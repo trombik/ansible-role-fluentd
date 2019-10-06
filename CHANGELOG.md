@@ -1,3 +1,17 @@
+## Release 1.5.1
+
+* 20bf866 bugfix: QA
+* 19bb60b bugfix: QA
+* 2b18620 bugfix: remove stale patch and tasks
+* 5a7f2c4 bugfix: refactor the role
+* 94e73f4 bugfix: QA
+* cb7a13e bugfix: remove hard-dependency
+* f800d67 bugfix: restore ansible_verbosity value
+* 4e1c588 update the example plugin
+* 994ff5c bugfix: QA
+* 7d50b37 [bugfix] QA (#8)
+* 16632a0 [bugfix] drop invalid tag from meta (#7)
+
 ## Release 1.5.0
 
 * 707f446 [feature][bugfix] Support OpenBSD 6.3, drop EoLed release (#5)
