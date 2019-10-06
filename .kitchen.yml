@@ -10,7 +10,7 @@ provisioner:
   name: ansible_playbook
   require_chef_for_busser: false
   require_ruby_for_busser: false
-  ansible_verbosity: 1
+  ansible_verbosity: 4
   ansible_verbose: true
   ansible_extra_flags: <%= ENV['ANSIBLE_EXTRA_FLAGS'] %>
   requirements_path: requirements.yml
@@ -22,9 +22,9 @@ provisioner:
     - extra_roles
 
 platforms:
-  - name: freebsd-10.3-amd64
+  - name: freebsd-12.0-amd64
     driver:
-      box: trombik/ansible-freebsd-10.3-amd64
+      box: trombik/ansible-freebsd-12.0-amd64
       box_check_update: false
     driver_config:
       ssh:
@@ -33,52 +33,25 @@ platforms:
       extra_vars:
         ansible_python_interpreter: '/usr/local/bin/python'
 
-  - name: freebsd-11.1-amd64
+  - name: openbsd-6.5-amd64
     driver:
-      box: trombik/ansible-freebsd-11.1-amd64
+      box: trombik/ansible-openbsd-6.5-amd64
       box_check_update: false
     driver_config:
       ssh:
         shell: '/bin/sh'
     provisioner:
       extra_vars:
-        ansible_python_interpreter: '/usr/local/bin/python'
+        ansible_python_interpreter: '/usr/local/bin/python3'
 
-  - name: openbsd-6.2-amd64
+  - name: ubuntu-18.04-amd64
     driver:
-      box: trombik/ansible-openbsd-6.2-amd64
-      box_check_update: false
-    driver_config:
-      ssh:
-        shell: '/bin/sh'
-    provisioner:
-      extra_vars:
-        ansible_python_interpreter: '/usr/local/bin/python'
-
-  - name: openbsd-6.3-amd64
-    driver:
-      box: trombik/ansible-openbsd-6.3-amd64
-      box_check_update: false
-    driver_config:
-      ssh:
-        shell: '/bin/sh'
-    provisioner:
-      extra_vars:
-        ansible_python_interpreter: '/usr/local/bin/python'
-
-  - name: ubuntu-14.04-amd64
-    driver:
-      box: trombik/ansible-ubuntu-14.04-amd64
+      box: trombik/ansible-ubuntu-18.04-amd64
       box_check_update: false
 
-  - name: ubuntu-16.04-amd64
+  - name: centos-7.4-x86_64
     driver:
-      box: trombik/ansible-ubuntu-16.04-amd64
-      box_check_update: false
-
-  - name: centos-7.3-x86_64
-    driver:
-      box: trombik/ansible-centos-7.3-x86_64
+      box: trombik/ansible-centos-7.4-x86_64
       box_check_update: false
 
 suites:
@@ -98,4 +71,4 @@ suites:
       name: shell
       command: rspec -c -f d -I tests/serverspec tests/serverspec/without_ca_key_spec.yml
     includes:
-      - freebsd-11.1-amd64
+      - freebsd-12.0-amd64
