@@ -134,17 +134,17 @@ when "openbsd"
   fluentd_binary.each do |bin|
     describe file("/usr/local/bin/#{bin}") do
       it { should be_symlink }
-      it { should be_linked_to "/usr/local/bin/#{bin}23" }
+      it { should be_linked_to "/usr/local/bin/#{bin}26" }
     end
 
-    describe file("/usr/local/bin/#{bin}23") do
+    describe file("/usr/local/bin/#{bin}26") do
       it { should be_file }
       it { should be_mode 755 }
       it { should be_owned_by default_user }
       it { should be_grouped_into default_group }
     end
 
-    describe command("/usr/local/bin/#{bin}23 --help") do
+    describe command("/usr/local/bin/#{bin}26 --help") do
       # intentionally ignore stdout here becase there is no common output. what
       # is being tested here is; the binary can be compiled and runnable
       its(:exit_status) { should eq bin == "fluent-binlog-reader" ? 1 : 0 }

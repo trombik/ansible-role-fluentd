@@ -10,6 +10,7 @@
 - name: Add fluentd_user to fluentd_extra_groups
   user:
     name: "{{ fluentd_user }}"
+    create_home: no
     append: yes
     groups: "{{ fluentd_extra_groups }}"
     state: present

@@ -124,7 +124,7 @@ below. The role creates a configuration fragment of `config` under
 | `__fluentd_service_name` | `fluentd` |
 | `__fluentd_config_dir` | `/etc/fluentd` |
 | `__fluentd_config_file` | `{{ fluentd_config_dir }}/fluent.conf` |
-| `__fluentd_bin` | `/usr/local/bin/fluentd23` |
+| `__fluentd_bin` | `/usr/local/bin/fluentd26` |
 | `__fluentd_gem_bin` | `/usr/local/bin/fluent-gem` |
 | `__fluentd_unix_pipe_dir` | `/var/tmp/fluentd` |
 | `__fluentd_flags` | `""` |
@@ -155,12 +155,44 @@ below. The role creates a configuration fragment of `config` under
 # Example Playbook
 
 ```yaml
+---
 - hosts: localhost
   roles:
+    - name: trombik.apt_repo
+      when: ansible_os_family == 'Debian'
+    - name: trombik.redhat_repo
+      when: ansible_os_family == 'RedHat'
+    - name: trombik.language_ruby
     - ansible-role-fluentd
   vars:
+    os_language_ruby_package:
+      FreeBSD: lang/ruby26
+      OpenBSD: ruby%2.6
+      RedHat: "{{ __language_ruby_package }}"
+      Debian: "{{ __language_ruby_package }}"
+    language_ruby_package: "{{ os_language_ruby_package[ansible_os_family] }}"
+    apt_repo_keys_to_add:
+      - https://packages.treasuredata.com/GPG-KEY-td-agent
+    apt_repo_to_add:
+      - "deb http://packages.treasuredata.com/3/ubuntu/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} contrib"
+    redhat_repo:
+      treasuredata:
+        baseurl: http://packages.treasuredata.com/3/redhat/$releasever/$basearch
+        gpgkey: https://packages.treasuredata.com/GPG-KEY-td-agent
     fluentd_extra_groups: tty,bin
-    fluentd_flags: "{% if ansible_os_family == 'FreeBSD' %}-p {{ fluentd_plugin_dir }}{% elif ansible_os_family == 'Debian' %}-p {{ fluentd_plugin_dir }}{% elif ansible_os_family == 'RedHat' %}{% elif ansible_os_family == 'OpenBSD' %}--daemon /var/run/fluentd/fluentd.pid --config /etc/fluentd/fluent.conf -p /etc/fluentd/plugin{% endif %} --log {{ fluentd_log_file }}"
+
+    os_fluentd_flags:
+      FreeBSD: "-p {{ fluentd_plugin_dir }}"
+      Debian: "-p {{ fluentd_plugin_dir }}"
+      RedHat: ""
+      OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }}"
+    fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }} --log {{ fluentd_log_file }}"
+    os_fluentd_bin:
+      OpenBSD: /usr/local/bin/fluentd26
+      FreeBSD: "{{ __fluentd_bin }}"
+      RedHat: "{{ __fluentd_bin }}"
+      Debian: "{{ __fluentd_bin }}"
+    fluentd_bin: "{{ os_fluentd_bin[ansible_os_family] }}"
     fluentd_system_config: |
       log_level debug
       suppress_config_dump
