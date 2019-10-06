@@ -105,11 +105,6 @@
     - fluentd_ca_key | default(false)
     - fluentd_ca_key != ''
 
-#- include: configure-leaf.yml
-
-#- include: configure-forwarder.yml
-
-
 - name: Register installed plugins
   shell: "{{ fluentd_gem_bin }} list"
   register: gem_list

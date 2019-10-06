@@ -7,7 +7,7 @@
     state: present
 
 - name: Get ruby version
-  command: "ruby -e \"puts RUBY_VERSION.split('.')[0..1].join\"" # 19, 20, 21 ...
+  command: "ruby -e \"puts RUBY_VERSION.split('.')[0..1].join\""
   register: register_fluentd_ruby_version_sym
   changed_when: false
 
