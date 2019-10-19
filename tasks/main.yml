@@ -130,6 +130,36 @@
   with_items: "{{ fluentd_plugins_to_create }}"
   when: item.state == 'present'
 
+- assert:
+    that:
+      - item.state == 'present' or item.state == 'absent'
+      - item.path | length > 0
+  with_items: "{{ fluentd_extra_files }}"
+
+- name: Create basedir for fluentd_extra_files
+  file:
+    path: "{{ item.path | dirname }}"
+    state: directory
+  with_items: "{{ fluentd_extra_files }}"
+  when:
+    - item.state == 'present'
+
+- name: Create fluentd_extra_files
+  template:
+    src: extra_file.j2
+    mode: "{{ item.mode | default(omit) }}"
+    dest: "{{ item.path }}"
+    owner: "{{ item.owner | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+  with_items: "{{ fluentd_extra_files }}"
+  when: item.state == 'present'
+
+- name: Delete fluentd_extra_files
+  file:
+    path: "{{ item.path }}"
+  with_items: "{{ fluentd_extra_files }}"
+  when: item.state == 'absent'
+
 - name: Remove local fluent plugins
   file:
     path: "{{ fluentd_plugin_dir }}/{{ item.name }}"
