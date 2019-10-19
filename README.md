@@ -53,6 +53,7 @@ None
 | `fluentd_system_config`       | a string that is enclosed by `<system>` tag in `fluentd.conf`. use `|` in yaml to set multiple lines of system-wide configurations | `log_level error` |
 | `fluentd_pid_dir` | path to PID directory | `"{{ __fluentd_pid_dir }}"` |
 | `fluentd_pid_file` | path to PID file | `"{{ __fluentd_pid_file }}"` |
+| `fluentd_extra_files` | list of extra files to create or delete (see below) | `[]` |
 
 Note that although the role provides `fluentd_log_dir` and `fluentd_log_file`,
 you need to configure `fluentd` to log to `fluentd_log_file`. The role does
@@ -79,6 +80,23 @@ below. The role creates a configuration fragment of `config` under
 |---------|--------------------------------------------------|
 | enabled | bool, create the config if true, remove if false |
 | config  | the configuration                                |
+
+## `fluentd_extra_files`
+
+This variable is a list of dict that represent files to create or delete.
+Useful for files that is not part of `fluentd` configuration, such as a
+`elasticsearch` template. An example use-case is
+[`template_file`](https://github.com/uken/fluent-plugin-elasticsearch#template_file)
+for `fluent-plugin-elasticsearch`.
+
+| key       | value                                           |
+|-----------|-------------------------------------------------|
+| `path`    | path to the file                                |
+| `state`   | state of the file, either `present` or `absent` |
+| `content` | the content of the file                         |
+| `owner`   | the owner of the file, optional                 |
+| `group`   | the group of the file, optional                 |
+| `mode`    | the mode of the file, optional                  |
 
 ## Debian
 
@@ -165,6 +183,39 @@ below. The role creates a configuration fragment of `config` under
     - name: trombik.language_ruby
     - ansible-role-fluentd
   vars:
+    fluentd_extra_files:
+      - path: "{{ fluentd_config_dir }}/es_templates/logstash_template.json"
+        mode: '0644'
+        state: present
+        content: |
+          {
+            "mappings": {
+              "_default_": {
+                "_all": { "enabled": false },
+                "_source": { "compress": true },
+                "properties" : {
+                  "event_data": { "type": "object", "store": "no" },
+                  "@fields": { "type": "object", "dynamic": true, "path": "full" },
+                  "@message": { "type": "string", "index": "analyzed" },
+                  "@source": { "type": "string", "index": "not_analyzed" },
+                  "@source_host": { "type": "string", "index": "not_analyzed" },
+                  "@source_path": { "type": "string", "index": "not_analyzed" },
+                  "@tags": { "type": "string", "index": "not_analyzed" },
+                  "@timestamp": { "type": "date", "index": "not_analyzed" },
+                  "@type": { "type": "string", "index": "not_analyzed" }
+                }
+              }
+            },
+            "settings": {
+              "index.cache.field.type" : "soft",
+              "index.refresh_interval": "5s",
+              "index.store.compress.stored": true,
+              "index.number_of_shards": "3",
+              "index.query.default_field": "querystring",
+              "index.routing.allocation.total_shards_per_node": "2"
+            },
+            "template": "logstash-*"
+          }
     os_language_ruby_package:
       FreeBSD: lang/ruby26
       OpenBSD: ruby%2.6

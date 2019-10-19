@@ -26,3 +26,4 @@ fluentd_log_dir: "/var/log/{{ fluentd_service_name }}"
 fluentd_log_file: "{{ fluentd_log_dir }}/{{ fluentd_service_name }}.log"
 fluentd_pid_dir: "{{ __fluentd_pid_dir }}"
 fluentd_pid_file: "{{ __fluentd_pid_file }}"
+fluentd_extra_files: []
