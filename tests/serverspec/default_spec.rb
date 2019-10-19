@@ -290,3 +290,10 @@ describe file(fluentd_log_file) do
   # https://github.com/reallyenglish/ansible-role-fluentd/issues/44
   its(:content) { should match(/fluentd supervisor process get SIGHUP/) }
 end
+
+describe file "#{fluentd_conf_dir}/es_templates/logstash_template.json" do
+  it { should exist }
+  it { should be_file }
+  it { should be_mode 644 }
+  its(:content) { should match Regexp.escape('"index.routing.allocation.total_shards_per_node": "2"') }
+end
