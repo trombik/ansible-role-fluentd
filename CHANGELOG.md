@@ -1,3 +1,9 @@
+## Release 1.6.0
+
+* d5e2cd3 feature: introduce fluentd_extra_files
+* 7930aad bugfix: add required gem for integration test
+* 4dd9607 bugfix: update box version
+
 ## Release 1.5.1
 
 * 20bf866 bugfix: QA
