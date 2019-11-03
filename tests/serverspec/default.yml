@@ -41,6 +41,15 @@
             },
             "template": "logstash-*"
           }
+    os_fluentd_extra_packages:
+      FreeBSD:
+        - net/libmaxminddb
+      RedHat: []
+      Debian:
+        - libmaxminddb-dev
+      OpenBSD: []
+    fluentd_extra_packages: "{{ os_fluentd_extra_packages[ansible_os_family] }}"
+
     os_language_ruby_package:
       FreeBSD: lang/ruby26
       OpenBSD: ruby%2.6

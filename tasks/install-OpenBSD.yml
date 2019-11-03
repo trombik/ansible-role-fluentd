@@ -1,5 +1,10 @@
 ---
 
+- name: Install fluentd_extra_packages
+  openbsd_pkg:
+    name: "{{ fluentd_extra_packages }}"
+    state: present
+
 - name: Install fluentd via gem
   gem:
     name: fluentd
