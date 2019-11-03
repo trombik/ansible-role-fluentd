@@ -1,3 +1,7 @@
+## Release 1.7.0
+
+* 9c6d86c feature: introduce fluentd_extra_packages
+
 ## Release 1.6.0
 
 * d5e2cd3 feature: introduce fluentd_extra_files
