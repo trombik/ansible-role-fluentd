@@ -1,5 +1,10 @@
 ---
 
+- name: Install fluentd_extra_packages
+  pkgng:
+    name: "{{ fluentd_extra_packages }}"
+    state: present
+
 - name: Ensure fluentd is installed
   pkgng:
     name: rubygem-fluentd

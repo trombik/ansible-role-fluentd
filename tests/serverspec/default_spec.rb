@@ -18,6 +18,7 @@ default_user         = "root"
 default_group        = "root"
 pid_dir_mode         = 755
 extra_groups         = %w[tty bin]
+extra_packages = []
 
 case os[:family]
 when "freebsd"
@@ -34,6 +35,7 @@ when "freebsd"
   pid_dir_mode         = 775
   fluentd_log_dir      = "/var/log/fluentd"
   fluentd_log_file     = "#{fluentd_log_dir}/fluentd.log"
+  extra_packages = ["net/libmaxminddb"]
 when "openbsd"
   fluentd_user_name     = "_fluentd"
   fluentd_user_group    = "_fluentd"
@@ -47,6 +49,8 @@ when "openbsd"
   default_group         = "wheel"
   fluentd_log_dir      = "/var/log/fluentd"
   fluentd_log_file     = "#{fluentd_log_dir}/fluentd.log"
+when "ubuntu"
+  extra_packages = ["libmaxminddb-dev"]
 end
 fluentd_plugin_dir = "#{fluentd_conf_dir}/plugin"
 pid_dir = "/var/run/#{fluentd_service_name}"
@@ -294,6 +298,12 @@ end
 describe file "#{fluentd_conf_dir}/es_templates/logstash_template.json" do
   it { should exist }
   it { should be_file }
-  it { should be_mode 644 }
+  it { should be_mode 664 }
   its(:content) { should match Regexp.escape('"index.routing.allocation.total_shards_per_node": "2"') }
+end
+
+extra_packages.each do |p|
+  describe package p do
+    it { should be_installed }
+  end
 end

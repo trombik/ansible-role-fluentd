@@ -1,5 +1,10 @@
 ---
 
+- name: Install fluentd_extra_packages
+  yum:
+    name: "{{ fluentd_extra_packages }}"
+    state: present
+
 - name: Install fluentd
   yum:
     name: "{{ fluentd_package_name }}"

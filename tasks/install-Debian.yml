@@ -1,5 +1,10 @@
 ---
 
+- name: Install fluentd_extra_packages
+  apt:
+    name: "{{ fluentd_extra_packages }}"
+    state: present
+
 - name: Install fluentd
   apt:
     name: "{{ fluentd_package_name }}"

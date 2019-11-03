@@ -54,6 +54,7 @@ None
 | `fluentd_pid_dir` | path to PID directory | `"{{ __fluentd_pid_dir }}"` |
 | `fluentd_pid_file` | path to PID file | `"{{ __fluentd_pid_file }}"` |
 | `fluentd_extra_files` | list of extra files to create or delete (see below) | `[]` |
+| `fluentd_extra_packages` | list of extra packages to install | `[]` |
 
 Note that although the role provides `fluentd_log_dir` and `fluentd_log_file`,
 you need to configure `fluentd` to log to `fluentd_log_file`. The role does
@@ -185,7 +186,7 @@ for `fluent-plugin-elasticsearch`.
   vars:
     fluentd_extra_files:
       - path: "{{ fluentd_config_dir }}/es_templates/logstash_template.json"
-        mode: '0644'
+        mode: '0664'
         state: present
         content: |
           {
@@ -216,6 +217,15 @@ for `fluent-plugin-elasticsearch`.
             },
             "template": "logstash-*"
           }
+    os_fluentd_extra_packages:
+      FreeBSD:
+        - net/libmaxminddb
+      RedHat: []
+      Debian:
+        - libmaxminddb-dev
+      OpenBSD: []
+    fluentd_extra_packages: "{{ os_fluentd_extra_packages }}"
+
     os_language_ruby_package:
       FreeBSD: lang/ruby26
       OpenBSD: ruby%2.6
