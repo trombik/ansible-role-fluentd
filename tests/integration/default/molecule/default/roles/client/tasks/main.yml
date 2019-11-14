@@ -1,0 +1,15 @@
+---
+
+- name: Forward local syslog message to remote server
+  lineinfile:
+    dest: /etc/syslog.conf
+    insertbefore: "^!ppp"
+    line: "*.* @192.168.21.200:5140"
+  register: register_syslog_conf
+
+- name: Restart syslogd  # noqa 503
+  service:
+    name: syslogd
+    state: restarted  # noqa 503
+  when:
+    - register_syslog_conf.changed
