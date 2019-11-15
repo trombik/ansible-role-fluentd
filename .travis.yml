@@ -16,6 +16,7 @@ cache:
     - $HOME/.rvm/
     - $HOME/.bundler/
     - $HOME/.cache/pip/
+  pip: true
 
 before_install:
   # XXX update RubyGem to fix build in Travis CI. when ruby 2.6.3 or later is
@@ -26,10 +27,11 @@ before_install:
 
 install:
   # Install ansible
-  - pip install ansible yamllint
+  - pip install ansible yamllint molecule docker
 
-  # Check ansible version
+  # Check versions
   - ansible --version
+  - molecule --version
 
   # Create ansible.cfg with correct roles_path
   - mkdir -p extra_roles
@@ -81,7 +83,10 @@ script:
   - yamllint -c .yamllint.yml .
 
   # run the QA test
-  - qansible qa
+  - echo qansible qa
+
+  # run molecule
+  - ( cd tests/integration/default && molecule test -s travisci_ubuntu1804 )
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
