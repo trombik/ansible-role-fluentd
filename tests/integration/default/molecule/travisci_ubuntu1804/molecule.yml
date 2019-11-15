@@ -44,8 +44,8 @@ provisioner:
     side_effect: ../default/side_effect.yml
   inventory:
     links:
-      hosts: inventory/default
-      group_vars: group_vars/
+      hosts: ../default/inventory/default
+      group_vars: ../default/group_vars/
 
 verifier:
   name: testinfra
