@@ -15,6 +15,22 @@ def test_hosts_file(host):
     assert f.group == 'root' or f.group == 'wheel'
 
 
+def test_icmp_from_client(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'client1':
+        cmd = host.run("ping server1 -c 1 -q")
+
+        assert cmd.succeeded
+
+
+def test_icmp_from_server(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'server1':
+        cmd = host.run("ping client1 -c 1 -q")
+
+        assert cmd.succeeded
+
+
 def get_service_name(host):
     if host.system_info.distribution == 'freebsd':
         return 'fluentd'

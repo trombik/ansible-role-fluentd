@@ -17,6 +17,11 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
+    networks:
+      - name: shared
+        ipv4_address: 192.168.21.200
+        aliases: server1
+
   - name: client1
     hostname: client1
     image: geerlingguy/docker-ubuntu1804-ansible
@@ -24,6 +29,10 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
+    networks:
+      - name: shared
+        ipv4_address: 192.168.21.100
+        aliases: client1
 
 provisioner:
   name: ansible
