@@ -26,6 +26,7 @@ def get_service_name(host):
         return 'td-agent'
     raise NameError('Unknown distribution')
 
+
 def get_ansible_vars(host):
     return host.ansible.get_variables()
 
