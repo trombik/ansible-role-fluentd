@@ -84,17 +84,21 @@
     group: "{{ fluentd_group }}"
     validate: openssl x509 -noout -in %s
   when:
-    # XXX  [602] Don't compare to empty string
+    # XXX  [602] Don't compare to empty string. not sure what the best
+    # practice is for testing emptyness
     # https://github.com/ansible/ansible-lint/issues/457
-    - fluentd_ca_cert | length > 0
+    - fluentd_ca_cert | default(false)
+    - fluentd_ca_cert | default(flase) | length > 0
 
 - name: Assert `fluentd_ca_private_key_passphrase is set when fluentd_ca_key is used
   assert:
     msg: "When `fluentd_ca_key` is used, you need to set `fluentd_ca_private_key_passphrase`"
     that:
-      - fluentd_ca_private_key_passphrase | length > 0
+      - fluentd_ca_private_key_passphrase | default(false)
+      - fluentd_ca_private_key_passphrase | default(false) | length > 0
   when:
-    - fluentd_ca_key | length > 0
+    - fluentd_ca_key | default(false)
+    - fluentd_ca_key | default(false) | length > 0
 
 - name: Install ca_key.pem
   template:
@@ -107,7 +111,8 @@
   environment:
     FLUENTD_CA_PASS: "{{ fluentd_ca_private_key_passphrase }}"
   when:
-    - fluentd_ca_key | length > 0
+    - fluentd_ca_key | default(false)
+    - fluentd_ca_key | default(false) | length > 0
 
 - name: Register installed plugins
   command: "{{ fluentd_gem_bin }} list"
