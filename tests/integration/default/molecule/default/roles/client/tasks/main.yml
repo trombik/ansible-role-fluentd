@@ -2,7 +2,7 @@
 
 - name: Forward local syslog message to remote server
   lineinfile:
-    dest: {% id ansible_os_family == 'FreeBSD' %}/etc/syslog.conf{% else %}/etc/rsyslog.conf{% endif %}
+    dest: "{% id ansible_os_family == 'FreeBSD' %}/etc/syslog.conf{% else %}/etc/rsyslog.conf{% endif %}"
     insertbefore: "^!ppp"
     line: "*.* @192.168.21.200:5140"
   register: register_syslog_conf
