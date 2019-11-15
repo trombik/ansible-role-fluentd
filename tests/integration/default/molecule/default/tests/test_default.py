@@ -26,6 +26,9 @@ def get_service_name(host):
         return 'td-agent'
     raise NameError('Unknown distribution')
 
+def get_ansible_vars(host):
+    return host.ansible.get_variables()
+
 
 def read_remote_file(host, filename):
     f = host.file(filename)
@@ -48,19 +51,37 @@ def test_service(host):
     assert s.is_enabled
 
 
-def test_digests(host):
-    ansible_vars = host.ansible.get_variables()
-    if ansible_vars['inventory_hostname'] == 'server1':
-        content1 = read_digest(host, '/tmp/digest1')
-        content2 = read_digest(host, '/tmp/digest2')
-        cmd1 = host.run("grep -- %s /tmp/fluentd.log.*", content1)
-        cmd2 = host.run("grep -- %s /tmp/fluentd.log.*", content2)
-
-        assert content1 is not None
-        assert cmd1.succeeded
-        assert content2 is not None
-        assert cmd2.succeeded
-    elif ansible_vars['inventory_hostname'] == 'client1':
+def test_find_digest1_on_client(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'client1':
         f = host.file('/tmp/digest1')
 
         assert f.exists
+
+
+def test_find_digest2_on_client(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'client1':
+        f = host.file('/tmp/digest2')
+
+        assert f.exists
+
+
+def test_find_digest1_in_logs(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'server1':
+        content = read_digest(host, '/tmp/digest1')
+        cmd = host.run("grep -- '%s' /tmp/fluentd.log.*", content)
+
+        assert content is not None
+        assert cmd.succeeded
+
+
+def test_find_digest2_in_logs(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'server1':
+        content = read_digest(host, '/tmp/digest2')
+        cmd = host.run("grep -- %s /tmp/fluentd.log.*", content)
+
+        assert content is not None
+        assert cmd.succeeded
