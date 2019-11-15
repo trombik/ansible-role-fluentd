@@ -1,4 +1,9 @@
 ---
+os_project_fluent_cat:
+  FreeBSD: fluent-cat
+  Debian: /opt/td-agent/embedded/bin/fluent-cat
+
+project_fluent_cat: "{{ os_project_fluent_cat[ansible_os_family] }}"
 
 fluentd_configs:
   100_input_unix_pipe:

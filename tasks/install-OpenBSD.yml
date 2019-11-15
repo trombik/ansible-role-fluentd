@@ -16,7 +16,7 @@
   register: register_fluentd_ruby_version_sym
   changed_when: false
 
-- name: Get a list of gem binaries # noqa 306
+- name: Get a list of gem binaries  # noqa 306
   # XXX pipefail is not a standard in sh(1)
   shell: "gem contents fluentd | grep -E '^/usr/local/lib/ruby/gems/[[:digit:]]+\\.[[:digit:]]+/gems/fluentd-[[:digit:]]+\\.[[:digit:]]+\\.[[:digit:]]+/bin/'"
   register: register_fluentd_gem_binary

@@ -26,6 +26,7 @@
       when:
         - ansible_os_family == 'OpenBSD'
   roles:
+    - role: trombik.apt_repo
     - role: client
       when: ansible_hostname == 'client1'
     - role: ansible-role-fluentd

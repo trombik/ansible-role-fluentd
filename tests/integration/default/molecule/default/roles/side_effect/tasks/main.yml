@@ -17,7 +17,7 @@
     now: "{{ ansible_date_time.iso8601 | hash('sha1') }}"
 
 - name: Send the digest via socket
-  shell: "echo {{ now }} | fluent-cat info.test -u -s /var/tmp/fluentd/fluentd.sock -f none"
+  shell: "echo {{ now }} | {{ project_fluent_cat }} info.test -u -s /var/tmp/fluentd/fluentd.sock -f none"
 
 - name: Create a file that contains the second digest
   copy:

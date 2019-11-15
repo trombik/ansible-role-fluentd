@@ -10,7 +10,7 @@
 - name: "Include configure-{{ ansible_os_family }}.yml"
   include: "configure-{{ ansible_os_family }}.yml"
 
-- name: Add fluentd_user to fluentd_extra_groups # noqa 306
+- name: Add fluentd_user to fluentd_extra_groups  # noqa 306
   # XXX pipefail is not a standard in sh(1)
   user:
     name: "{{ fluentd_user }}"
