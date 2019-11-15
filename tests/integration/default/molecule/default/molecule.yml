@@ -38,6 +38,7 @@ provisioner:
     name: ansible-lint
   playbooks:
     converge: playbook.yml
+    side_effect: side_effect.yml
   inventory:
     links:
       hosts: inventory/default

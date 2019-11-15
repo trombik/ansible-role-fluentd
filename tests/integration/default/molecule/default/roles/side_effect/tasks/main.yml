@@ -1,0 +1,25 @@
+---
+
+- name: Create a digest
+  set_fact:
+    now: "{{ ansible_date_time.epoch | hash('sha1') }}"
+
+- name: Send the digest via syslog
+  command: "logger {{ now }}"
+
+- name: Create a file that contains the first digest
+  copy:
+    content: "{{ now }}"
+    dest: /tmp/digest1
+
+- name: Create another digest
+  set_fact:
+    now: "{{ ansible_date_time.iso8601 | hash('sha1') }}"
+
+- name: Send the digest via socket
+  shell: "echo {{ now }} | fluent-cat info.test -u -s /var/tmp/fluentd/fluentd.sock -f none"
+
+- name: Create a file that contains the second digest
+  copy:
+    content: "{{ now }}"
+    dest: /tmp/digest2
