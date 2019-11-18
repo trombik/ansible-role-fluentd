@@ -26,7 +26,7 @@ provisioner:
   name: ansible
   become: True
   env:
-    ANSIBLE_ROLES_PATH: ../../../../../../:roles
+    ANSIBLE_ROLES_PATH: ../../../../../:roles
   options:
     v: True
     become: True
