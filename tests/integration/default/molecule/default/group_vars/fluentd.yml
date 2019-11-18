@@ -29,8 +29,10 @@ apt_repo_to_add:
   - "deb http://packages.treasuredata.com/3/ubuntu/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} contrib"
 
 os_fluentd_flags:
-  FreeBSD: "-p {{ fluentd_plugin_dir }}"
-  Debian: "-p {{ fluentd_plugin_dir }}"
-  RedHat: ""
-  OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }}"
-fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }} --log {{ fluentd_log_file }}"
+  FreeBSD: |
+    fluentd_flags="-p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
+  Debian: |
+    TD_AGENT_LOG_FILE="{{ fluentd_log_file }}"
+    TD_AGENT_OPTIONS="-p {{ fluentd_plugin_dir }}"
+    STOPTIMEOUT=180
+fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }}"
