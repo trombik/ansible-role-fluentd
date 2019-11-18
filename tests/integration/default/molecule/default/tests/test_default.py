@@ -18,7 +18,7 @@ def test_hosts_file(host):
 def test_icmp_from_client(host):
     ansible_vars = get_ansible_vars(host)
     if ansible_vars['inventory_hostname'] == 'client1':
-        cmd = host.run("ping server1 -c 1 -q")
+        cmd = host.run("ping -c 1 -q server1")
 
         assert cmd.succeeded
 
@@ -26,7 +26,7 @@ def test_icmp_from_client(host):
 def test_icmp_from_server(host):
     ansible_vars = get_ansible_vars(host)
     if ansible_vars['inventory_hostname'] == 'server1':
-        cmd = host.run("ping client1 -c 1 -q")
+        cmd = host.run("ping -c 1 -q client1")
 
         assert cmd.succeeded
 
