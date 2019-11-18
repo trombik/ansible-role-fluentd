@@ -1,0 +1,36 @@
+---
+os_project_fluent_cat:
+  FreeBSD: fluent-cat
+  Debian: /opt/td-agent/embedded/bin/fluent-cat
+
+project_fluent_cat: "{{ os_project_fluent_cat[ansible_os_family] }}"
+project_forward_host: "{% if ansible_virtualization_type == 'docker' %}server1{% else %}192.168.21.200{% endif %}"
+
+fluentd_configs:
+  100_input_unix_pipe:
+    enabled: true
+    config: |
+      <source>
+        @type unix
+        path {{ fluentd_unix_pipe_dir }}/fluentd.sock
+      </source>
+  900_output_secure_forward:
+    enabled: true
+    config: |
+      <match **>
+        @type secure_forward
+        shared_key password
+        self_hostname {{ ansible_fqdn }}
+        secure yes
+        ca_cert_path {{ fluentd_certs_dir }}/ca_cert.pem
+        <server>
+          host {{ project_forward_host }}
+          port 24284
+        </server>
+        <buffer time>
+          @type memory
+          flush_mode interval
+          flush_interval 1s
+          timekey 86400
+        </buffer>
+      </match>

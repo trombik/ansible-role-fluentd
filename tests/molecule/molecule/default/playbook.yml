@@ -1,0 +1,34 @@
+---
+
+- name: Coverage
+  hosts: all
+  pre_tasks:
+    - name: Dump all hostvars
+      debug:
+        var: hostvars[inventory_hostname]
+    - name: List all services (systemd)
+      # workaround ansible-lint: [303] service used in place of service module
+      shell: "echo; systemctl list-units --type service"
+      changed_when: false
+      when:
+        # in docker, init is not systemd
+        - ansible_virtualization_type != 'docker'
+        - ansible_os_family == 'RedHat' or ansible_os_family == 'Debian'
+    - name: list all services (FreeBSD service)
+      # workaround ansible-lint: [303] service used in place of service module
+      shell: "echo; service -l"
+      changed_when: false
+      when:
+        - ansible_os_family == 'FreeBSD'
+    - name: list all services (rcctl)
+      command: "rcctl ls all"
+      changed_when: false
+      when:
+        - ansible_os_family == 'OpenBSD'
+  roles:
+    - role: trombik.apt_repo
+    - role: install_ping
+    - role: client
+      when: ansible_hostname == 'client1'
+    - role: ansible-role-fluentd
+  vars:

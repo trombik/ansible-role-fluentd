@@ -1,0 +1,15 @@
+---
+
+- name: Forward local syslog message to remote server
+  lineinfile:
+    dest: "{% if ansible_os_family == 'FreeBSD' %}/etc/syslog.conf{% else %}/etc/rsyslog.conf{% endif %}"
+    insertbefore: "^!ppp"
+    line: "*.* @{{ project_forward_host }}:5140"
+  register: register_syslog_conf
+
+- name: Restart syslogd  # noqa 503
+  service:
+    name: "{% if ansible_os_family == 'FreeBSD' %}syslogd{% else %}rsyslog{% endif %}"
+    state: restarted  # noqa 503
+  when:
+    - register_syslog_conf.changed
