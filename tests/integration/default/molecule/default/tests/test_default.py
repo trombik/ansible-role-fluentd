@@ -18,7 +18,8 @@ def test_hosts_file(host):
 def test_icmp_from_client(host):
     ansible_vars = get_ansible_vars(host)
     if ansible_vars['inventory_hostname'] == 'client1':
-        cmd = host.run("ping -c 1 -q server1")
+        target = get_ping_target(host)
+        cmd = host.run("ping -c 1 -q %s" % target)
 
         assert cmd.succeeded
 
@@ -26,7 +27,8 @@ def test_icmp_from_client(host):
 def test_icmp_from_server(host):
     ansible_vars = get_ansible_vars(host)
     if ansible_vars['inventory_hostname'] == 'server1':
-        cmd = host.run("ping -c 1 -q client1")
+        target = get_ping_target(host)
+        cmd = host.run("ping -c 1 -q %s" % target)
 
         assert cmd.succeeded
 
@@ -45,6 +47,16 @@ def get_service_name(host):
 
 def get_ansible_vars(host):
     return host.ansible.get_variables()
+
+
+def get_ping_target(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'server1':
+        return 'client1' if is_docker(host) else '192.168.21.100'
+    elif ansible_vars['inventory_hostname'] == 'client1':
+        return 'server1' if is_docker(host) else '192.168.21.200'
+    else:
+        raise NameError("Unknown host `%s`" % ansible_vars['inventory_hostname'])
 
 
 def read_remote_file(host, filename):
