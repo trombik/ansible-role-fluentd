@@ -1,13 +1,17 @@
 ---
 # tasks file for ansible-role-fluentd
 
-- include_vars: "{{ ansible_os_family }}.yml"
+- name: "Include vars/{{ ansible_os_family }}.yml"
+  include_vars: "{{ ansible_os_family }}.yml"
 
-- include: "install-{{ ansible_os_family }}.yml"
+- name: "Include tasks/install-{{ ansible_os_family }}.yml"
+  include: "install-{{ ansible_os_family }}.yml"
 
-- include: "configure-{{ ansible_os_family }}.yml"
+- name: "Include configure-{{ ansible_os_family }}.yml"
+  include: "configure-{{ ansible_os_family }}.yml"
 
-- name: Add fluentd_user to fluentd_extra_groups
+- name: Add fluentd_user to fluentd_extra_groups  # noqa 306
+  # XXX pipefail is not a standard in sh(1)
   user:
     name: "{{ fluentd_user }}"
     create_home: no
@@ -80,16 +84,21 @@
     group: "{{ fluentd_group }}"
     validate: openssl x509 -noout -in %s
   when:
+    # XXX  [602] Don't compare to empty string. not sure what the best
+    # practice is for testing emptyness
+    # https://github.com/ansible/ansible-lint/issues/457
     - fluentd_ca_cert | default(false)
-    - fluentd_ca_cert != ''
+    - fluentd_ca_cert | default(flase) | length > 0
 
-- assert:
+- name: Assert `fluentd_ca_private_key_passphrase is set when fluentd_ca_key is used
+  assert:
     msg: "When `fluentd_ca_key` is used, you need to set `fluentd_ca_private_key_passphrase`"
     that:
-      - fluentd_ca_private_key_passphrase != ""
+      - fluentd_ca_private_key_passphrase | default(false)
+      - fluentd_ca_private_key_passphrase | default(false) | length > 0
   when:
     - fluentd_ca_key | default(false)
-    - fluentd_ca_key != ''
+    - fluentd_ca_key | default(false) | length > 0
 
 - name: Install ca_key.pem
   template:
@@ -103,10 +112,10 @@
     FLUENTD_CA_PASS: "{{ fluentd_ca_private_key_passphrase }}"
   when:
     - fluentd_ca_key | default(false)
-    - fluentd_ca_key != ''
+    - fluentd_ca_key | default(false) | length > 0
 
 - name: Register installed plugins
-  shell: "{{ fluentd_gem_bin }} list"
+  command: "{{ fluentd_gem_bin }} list"
   register: gem_list
   changed_when: False
 
@@ -116,7 +125,8 @@
   when: not ( gem_list.stdout | regex_search(item) )
   notify: Restart fluentd
 
-- assert:
+- name: Assert that state in fluentd_plugins_to_create is either present or absent
+  assert:
     that:
       - item.state == 'present' or item.state == 'absent'
   with_items: "{{ fluentd_plugins_to_create }}"
@@ -130,7 +140,8 @@
   with_items: "{{ fluentd_plugins_to_create }}"
   when: item.state == 'present'
 
-- assert:
+- name: Assert that state in fluentd_extra_files is either present or absent, and item.path is not empty
+  assert:
     that:
       - item.state == 'present' or item.state == 'absent'
       - item.path | length > 0
