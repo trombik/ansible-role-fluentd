@@ -74,7 +74,6 @@ def read_digest(host, filename):
 
 
 def test_service(host):
-    ansible_vars = get_ansible_vars(host)
     s = host.service(get_service_name(host))
 
     assert s.is_running
