@@ -44,8 +44,7 @@ def get_service_name(host):
 
 
 def get_ansible_vars(host):
-    with host.sudo():
-        return host.ansible.get_variables()
+    return host.ansible.get_variables()
 
 
 def read_remote_file(host, filename):
@@ -53,6 +52,18 @@ def read_remote_file(host, filename):
     assert f.exists
     assert f.content is not None
     return f.content.decode('utf-8')
+
+
+def is_docker(host):
+    ansible_facts = host.ansible('setup')['ansible_facts']
+    # host.ansible.get_variables() in docker does not contain
+    # 'ansible_virtualization_type'.
+    #
+    # https://github.com/philpep/testinfra/issues/447
+    if 'ansible_virtualization_type' in ansible_facts:
+        if ansible_facts['ansible_virtualization_type'] == 'docker':
+            return True
+    return False
 
 
 def read_digest(host, filename):
@@ -68,7 +79,7 @@ def test_service(host):
 
     assert s.is_running
     # XXX in docker, host.service() does not work
-    if ansible_vars['ansible_virtualization_type'] != 'docker':
+    if is_docker(host):
         assert s.is_enabled
 
 
