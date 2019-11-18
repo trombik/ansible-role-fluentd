@@ -30,7 +30,8 @@ def get_ping_target(host):
     elif ansible_vars['inventory_hostname'] == 'client1':
         return 'server1' if is_docker(host) else '192.168.21.200'
     else:
-        raise NameError("Unknown host `%s`" % ansible_vars['inventory_hostname'])
+        raise NameError("Unknown host `%s`" % \
+                ansible_vars['inventory_hostname'])
 
 
 def read_remote_file(host, filename):
