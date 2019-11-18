@@ -44,7 +44,8 @@ def get_service_name(host):
 
 
 def get_ansible_vars(host):
-    return host.ansible.get_variables()
+    with host.sudo():
+        return host.ansible.get_variables()
 
 
 def read_remote_file(host, filename):
