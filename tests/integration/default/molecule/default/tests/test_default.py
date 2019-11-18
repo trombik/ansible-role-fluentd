@@ -59,7 +59,7 @@ def is_docker(host):
     # host.ansible.get_variables() in docker does not contain
     # 'ansible_virtualization_type'.
     #
-    # https://github.com/philpep/testinfra/issues/447
+    # work around found at: https://github.com/philpep/testinfra/issues/447
     if 'ansible_virtualization_type' in ansible_facts:
         if ansible_facts['ansible_virtualization_type'] == 'docker':
             return True
