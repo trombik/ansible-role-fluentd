@@ -34,5 +34,7 @@ os_fluentd_flags:
   Debian: |
     TD_AGENT_LOG_FILE="{{ fluentd_log_file }}"
     TD_AGENT_OPTIONS="-p {{ fluentd_plugin_dir }}"
+    # XXX the default STOPTIMEOUT is 120 (sec) but, in travis, sometimes it
+    # failes to restart the service.
     STOPTIMEOUT=180
 fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }}"
