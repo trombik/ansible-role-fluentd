@@ -1,3 +1,8 @@
+## Release 2.0.0
+
+* da32a5b bugfix: update README
+* a6def1a backward incompatible, bugfix: change the meaning of fluentd_flags
+
 ## Release 1.7.0
 
 * 9c6d86c feature: introduce fluentd_extra_packages
