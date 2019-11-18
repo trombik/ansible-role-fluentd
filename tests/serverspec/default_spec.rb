@@ -161,7 +161,9 @@ when "redhat"
     it { should be_mode 644 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
-    its(:content) { should match(/^TD_AGENT_OPTIONS=" --log #{Regexp.escape(fluentd_log_file)}"$/) }
+    its(:content) { should match(/Managed by ansible/) }
+    its(:content) { should match(/^TD_AGENT_OPTIONS=""$/) }
+    its(:content) { should match(/^TD_AGENT_LOG_FILE="#{Regexp.escape(fluentd_log_file)}"$/) }
   end
 when "ubuntu"
   describe file("/etc/default/td-agent") do
@@ -169,7 +171,10 @@ when "ubuntu"
     it { should be_mode 644 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
-    its(:content) { should match(/^TD_AGENT_OPTIONS="-p #{Regexp.escape(fluentd_plugin_dir)} --log #{Regexp.escape(fluentd_log_file)}"$/) }
+    its(:content) { should match(/Managed by ansible/) }
+    its(:content) { should match(/^TD_AGENT_OPTIONS="-p #{Regexp.escape(fluentd_plugin_dir)}"$/) }
+    its(:content) { should match(/^TD_AGENT_LOG_FILE="#{Regexp.escape(fluentd_log_file)}"$/) }
+    its(:content) { should match(/^STOPTIMEOUT=180$/) }
   end
 when "freebsd"
   describe file("/etc/rc.conf.d") do
@@ -184,6 +189,7 @@ when "freebsd"
     it { should be_mode 644 }
     it { should be_owned_by default_user }
     it { should be_grouped_into default_group }
+    its(:content) { should match(/Managed by ansible/) }
     its(:content) { should match(/^fluentd_flags="-p #{Regexp.escape(fluentd_plugin_dir)} --log #{Regexp.escape(fluentd_log_file)}"$/) }
   end
 end
