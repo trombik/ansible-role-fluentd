@@ -37,7 +37,7 @@ None
 | `fluentd_config_fragment_dir` | path to `conf.d` directory | `{{ fluentd_config_dir }}/conf.d` |
 | `fluentd_service_name`        | service name of `fluentd` | `{{  __fluentd_service_name }}` |
 | `fluentd_plugin_dir`          | path to directory where local plugins reside | `{{ fluentd_config_dir }}/plugin` |
-| `fluentd_flags`               | optional command line flags for the service | `{{ __fluentd_flags }}` |
+| `fluentd_flags`               | flags for the service | `{{ __fluentd_flags }}` |
 | `fluentd_gem_bin`             | path to `fluent-gem`  | `{{ __fluentd_gem_bin }}` |
 | `fluentd_plugins_to_install`  | list of plug-in names to install | `[]` |
 | `fluentd_plugins_to_create`   | list of plug-ins to _create_ (see below) | `[]` |
@@ -224,7 +224,7 @@ for `fluent-plugin-elasticsearch`.
       Debian:
         - libmaxminddb-dev
       OpenBSD: []
-    fluentd_extra_packages: "{{ os_fluentd_extra_packages }}"
+    fluentd_extra_packages: "{{ os_fluentd_extra_packages[ansible_os_family] }}"
 
     os_language_ruby_package:
       FreeBSD: lang/ruby26
@@ -243,11 +243,17 @@ for `fluent-plugin-elasticsearch`.
     fluentd_extra_groups: tty,bin
 
     os_fluentd_flags:
-      FreeBSD: "-p {{ fluentd_plugin_dir }}"
-      Debian: "-p {{ fluentd_plugin_dir }}"
-      RedHat: ""
-      OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }}"
-    fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }} --log {{ fluentd_log_file }}"
+      FreeBSD: |
+        fluentd_flags="-p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
+      Debian: |
+        TD_AGENT_LOG_FILE="{{ fluentd_log_file }}"
+        TD_AGENT_OPTIONS="-p {{ fluentd_plugin_dir }}"
+        STOPTIMEOUT=180
+      RedHat: |
+        TD_AGENT_LOG_FILE="{{ fluentd_log_file }}"
+        TD_AGENT_OPTIONS=""
+      OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
+    fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }}"
     os_fluentd_bin:
       OpenBSD: /usr/local/bin/fluentd26
       FreeBSD: "{{ __fluentd_bin }}"
