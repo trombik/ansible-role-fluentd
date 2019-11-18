@@ -4,7 +4,7 @@ os_project_fluent_cat:
   Debian: /opt/td-agent/embedded/bin/fluent-cat
 
 project_fluent_cat: "{{ os_project_fluent_cat[ansible_os_family] }}"
-project_forward_host: {% if ansible_virtualization_type == 'docker' %}server1{% else %}192.168.21.200{% endif %}
+project_forward_host: "{% if ansible_virtualization_type == 'docker' %}server1{% else %}192.168.21.200{% endif %}"
 
 fluentd_configs:
   100_input_unix_pipe:
