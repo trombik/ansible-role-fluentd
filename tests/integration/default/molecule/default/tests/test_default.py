@@ -78,7 +78,7 @@ def test_service(host):
 
     assert s.is_running
     # XXX in docker, host.service() does not work
-    if is_docker(host):
+    if not is_docker(host):
         assert s.is_enabled
 
 
