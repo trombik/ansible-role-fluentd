@@ -4,7 +4,7 @@
   lineinfile:
     dest: "{% if ansible_os_family == 'FreeBSD' %}/etc/syslog.conf{% else %}/etc/rsyslog.conf{% endif %}"
     insertbefore: "^!ppp"
-    line: "*.* @192.168.21.200:5140"
+    line: "*.* @{{ project_forward_host }}:5140"
   register: register_syslog_conf
 
 - name: Restart syslogd  # noqa 503
