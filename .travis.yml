@@ -86,7 +86,7 @@ script:
   - echo qansible qa
 
   # run molecule
-  - ( cd tests/integration/default && molecule --debug test -s travisci_ubuntu1804 )
+  - ( cd tests/integration/default && molecule test -s travisci_ubuntu1804 )
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
