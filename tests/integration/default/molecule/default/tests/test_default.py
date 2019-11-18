@@ -62,10 +62,13 @@ def read_digest(host, filename):
 
 
 def test_service(host):
+    ansible_vars = get_ansible_vars(host)
     s = host.service(get_service_name(host))
 
     assert s.is_running
-    assert s.is_enabled
+    # XXX in docker, host.service() does not work
+    if ansible_vars['ansible_virtualization_type'] != 'docker':
+        assert s.is_enabled
 
 
 def test_find_digest1_on_client(host):
