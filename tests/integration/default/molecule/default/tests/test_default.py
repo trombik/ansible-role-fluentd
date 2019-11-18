@@ -7,32 +7,6 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
-def test_hosts_file(host):
-    f = host.file('/etc/hosts')
-
-    assert f.exists
-    assert f.user == 'root'
-    assert f.group == 'root' or f.group == 'wheel'
-
-
-def test_icmp_from_client(host):
-    ansible_vars = get_ansible_vars(host)
-    if ansible_vars['inventory_hostname'] == 'client1':
-        target = get_ping_target(host)
-        cmd = host.run("ping -c 1 -q %s" % target)
-
-        assert cmd.succeeded
-
-
-def test_icmp_from_server(host):
-    ansible_vars = get_ansible_vars(host)
-    if ansible_vars['inventory_hostname'] == 'server1':
-        target = get_ping_target(host)
-        cmd = host.run("ping -c 1 -q %s" % target)
-
-        assert cmd.succeeded
-
-
 def get_service_name(host):
     if host.system_info.distribution == 'freebsd':
         return 'fluentd'
@@ -83,6 +57,32 @@ def read_digest(host, filename):
             % os.environ['MOLECULE_INVENTORY_FILE']
     client1 = host.get_host(uri)
     return read_remote_file(client1, filename)
+
+
+def test_hosts_file(host):
+    f = host.file('/etc/hosts')
+
+    assert f.exists
+    assert f.user == 'root'
+    assert f.group == 'root' or f.group == 'wheel'
+
+
+def test_icmp_from_client(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'client1':
+        target = get_ping_target(host)
+        cmd = host.run("ping -c 1 -q %s" % target)
+
+        assert cmd.succeeded
+
+
+def test_icmp_from_server(host):
+    ansible_vars = get_ansible_vars(host)
+    if ansible_vars['inventory_hostname'] == 'server1':
+        target = get_ping_target(host)
+        cmd = host.run("ping -c 1 -q %s" % target)
+
+        assert cmd.succeeded
 
 
 def test_service(host):
