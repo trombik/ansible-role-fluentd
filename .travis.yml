@@ -88,13 +88,15 @@ script:
   - yamllint -c .yamllint.yml .
 
   # run the QA test
-  - echo qansible qa
+  - qansible qa
 
   # run molecule
   - echo TARGET_SCENARIO=${TARGET_SCENARIO}
   - |
     if [ -d "tests/molecule/molecule/${TARGET_SCENARIO}" ]; then
-      (cd tests/molecule && molecule test -s "${TARGET_SCENARIO}")
+      if molecule list; then
+        (cd tests/molecule && molecule test -s "${TARGET_SCENARIO}")
+      fi
     fi
 
 notifications:
