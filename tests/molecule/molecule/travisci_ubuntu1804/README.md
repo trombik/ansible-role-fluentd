@@ -3,5 +3,5 @@
 
 ### Description
 
-The scenario does the same thing in scenario `default`, but two `ubuntu`
+The scenario does the same thing in scenario `default`, but using `ubuntu`
 instances in docker.
