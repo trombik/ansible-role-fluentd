@@ -26,12 +26,15 @@
       when:
         - ansible_os_family == 'OpenBSD'
   roles:
-    - role: trombik.apt_repo
-      when:
-        - ansible_os_family == 'Debian'
     - role: docker
       when:
         - ansible_virtualization_type == 'docker'
+    - role: trombik.apt_repo
+      when:
+        - ansible_os_family == 'Debian'
+    - name: trombik.redhat_repo
+      when:
+        - ansible_os_family == 'RedHat'
     - role: client
       when:
         - ansible_hostname == 'client1'
