@@ -27,7 +27,8 @@
         - ansible_os_family == 'OpenBSD'
   roles:
     - role: trombik.apt_repo
-    - role: install_ping
+    - role: docker
+      ansible_virtualization_type == 'docker'
     - role: client
       when: ansible_hostname == 'client1'
     - role: ansible-role-fluentd
