@@ -28,6 +28,11 @@ apt_repo_keys_to_add:
 apt_repo_to_add:
   - "deb http://packages.treasuredata.com/3/ubuntu/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} contrib"
 
+redhat_repo:
+  treasuredata:
+    baseurl: http://packages.treasuredata.com/3/redhat/$releasever/$basearch
+    gpgkey: https://packages.treasuredata.com/GPG-KEY-td-agent
+
 os_fluentd_flags:
   FreeBSD: |
     fluentd_flags="-p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
@@ -37,4 +42,8 @@ os_fluentd_flags:
     # XXX the default STOPTIMEOUT is 120 (sec) but, in travis, sometimes it
     # failes to restart the service.
     STOPTIMEOUT=180
+  RedHat: |
+    TD_AGENT_LOG_FILE="{{ fluentd_log_file }}"
+    TD_AGENT_OPTIONS=""
+  OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
 fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }}"
