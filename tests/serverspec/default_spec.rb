@@ -96,8 +96,14 @@ end
 describe file(fluentd_plugin_dir) do
   it { should exist }
   it { should be_directory }
-  it { should be_owned_by default_user }
-  it { should be_grouped_into default_group }
+  case os[:family]
+  when "redhat"
+    it { should be_owned_by fluentd_user_name }
+    it { should be_grouped_into fluentd_user_group }
+  else
+    it { should be_owned_by default_user }
+    it { should be_grouped_into default_group }
+  end
   it { should be_mode 755 }
 end
 
