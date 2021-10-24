@@ -227,18 +227,18 @@ for `fluent-plugin-elasticsearch`.
     fluentd_extra_packages: "{{ os_fluentd_extra_packages[ansible_os_family] }}"
 
     os_language_ruby_package:
-      FreeBSD: lang/ruby26
-      OpenBSD: ruby%2.6
+      FreeBSD: lang/ruby27
+      OpenBSD: ruby%2.7
       RedHat: "{{ __language_ruby_package }}"
       Debian: "{{ __language_ruby_package }}"
     language_ruby_package: "{{ os_language_ruby_package[ansible_os_family] }}"
     apt_repo_keys_to_add:
       - https://packages.treasuredata.com/GPG-KEY-td-agent
     apt_repo_to_add:
-      - "deb http://packages.treasuredata.com/3/ubuntu/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} contrib"
+      - "deb http://packages.treasuredata.com/4/ubuntu/{{ ansible_distribution_release }}/ {{ ansible_distribution_release }} contrib"
     redhat_repo:
       treasuredata:
-        baseurl: http://packages.treasuredata.com/3/redhat/$releasever/$basearch
+        baseurl: http://packages.treasuredata.com/4/redhat/$releasever/$basearch
         gpgkey: https://packages.treasuredata.com/GPG-KEY-td-agent
     fluentd_extra_groups: tty,bin
 
@@ -255,7 +255,7 @@ for `fluent-plugin-elasticsearch`.
       OpenBSD: "--daemon /var/run/fluentd/fluentd.pid --config {{ fluentd_config_file }} -p {{ fluentd_plugin_dir }} --log {{ fluentd_log_file }}"
     fluentd_flags: "{{ os_fluentd_flags[ansible_os_family] }}"
     os_fluentd_bin:
-      OpenBSD: /usr/local/bin/fluentd26
+      OpenBSD: "/usr/local/bin/fluentd{{ language_ruby_version['short'] }}"
       FreeBSD: "{{ __fluentd_bin }}"
       RedHat: "{{ __fluentd_bin }}"
       Debian: "{{ __fluentd_bin }}"
