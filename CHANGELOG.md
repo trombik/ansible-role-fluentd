@@ -1,3 +1,27 @@
+## Release 2.0.1
+
+* dd8155f bugfix: bundle lock x86_64-linux for CI
+* db53fbc doc: update the example
+* ee5c56a bugfix: fix tests for CentOS
+* 64ddc91 ci: add GitHub workflows
+* bbe14d9 bugfix: update box versions, ruby versions, and repo URLs
+* 7f5f171 bugfix: update gems
+* 2f20c2f bugfix: wrong path to fluent-cat
+* e6f9056 bugfix: add RedHat to os_project_fluent_cat
+* 8285a21 bugfix: add treasuredata repository
+* 78efc7f bugfix: install rsyslog if not installed
+* 380bab4 QA
+* 56d075e bugfix: add travisci_centos7
+* 99c7d69 doc: update README.md
+* 2a159a3 bugfix: update molecule.yml and add docker role to travisci_ubuntu1804
+* bfb2dc5 bugfix: QA
+* bc829a9 bugfix: QA
+* fc09084 bugfix: QA
+* 61bde6f feature: enable molecule in travis
+* 8f11fde feature: introduce molecule tests
+* 7698e2a QA
+* d4d60c2 bugfix: update gitignore
+
 ## Release 2.0.0
 
 * da32a5b bugfix: update README
