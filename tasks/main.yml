@@ -125,6 +125,26 @@
   when: not ( gem_list.stdout | regex_search(item) )
   notify: Restart fluentd
 
+- name: Install fluentd_gems
+  community.general.gem:
+    bindir: "{{ item['bindir'] | default(omit) }}"
+    build_flags: "{{ item['build_flags'] | default(omit) }}"
+    env_shebang: "{{ item['env_shebang'] | default(omit) }}"
+    executable: "{{ item['executable'] | default(fluentd_gem_bin) }}"
+    force: "{{ item['force'] | default(omit) }}"
+    gem_source: "{{ item['gem_source'] | default(omit) }}"
+    include_dependencies: "{{ item['include_dependencies'] | default(omit) }}"
+    include_doc: "{{ item['include_doc'] | default(omit) }}"
+    install_dir: "{{ item['install_dir'] | default(omit) }}"
+    name: "{{ item['name'] }}"
+    norc: "{{ item['norc'] | default(omit) }}"
+    pre_release: "{{ item['pre_release'] | default(omit) }}"
+    repository: "{{ item['repository'] | default(omit) }}"
+    state: "{{ item['state'] | default(omit) }}"
+    user_install: "{{ item['user_install'] | default('no') }}"
+    version: "{{ item['version'] | default(omit) }}"
+  with_items: "{{ fluentd_gems }}"
+
 - name: Assert that state in fluentd_plugins_to_create is either present or absent
   assert:
     that:
