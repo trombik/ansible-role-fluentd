@@ -3,3 +3,6 @@ roles:
   - name: trombik.language_ruby
   - name: trombik.apt_repo
   - name: trombik.redhat_repo
+
+collections:
+  - community.general

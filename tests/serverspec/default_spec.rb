@@ -233,6 +233,10 @@ end
 describe command("#{fluentd_gem_bin} list") do
   its(:stdout) { should match(/fluent-plugin-redis/) }
   its(:stdout) { should match(/fluent-plugin-secure-forward/) }
+  its(:stdout) { should match(/elasticsearch-api/) }
+  its(:stdout) { should match(/elasticsearch-transport/) }
+  its(:stdout) { should match(/elasticsearch/) }
+  its(:stdout) { should match(/fluent-plugin-elasticsearch/) }
 end
 
 describe file("#{fluentd_config_dir}/listen_on_5140.conf") do

@@ -22,7 +22,9 @@ Note that `fluentd_plugins_to_install`  does not use `fluentd_plugin_dir`.
 
 # Requirements
 
-None
+This role requires the following `ansible` collections:
+
+* community.general
 
 # Role Variables
 
@@ -41,6 +43,7 @@ None
 | `fluentd_gem_bin`             | path to `fluent-gem`  | `{{ __fluentd_gem_bin }}` |
 | `fluentd_plugins_to_install`  | list of plug-in names to install | `[]` |
 | `fluentd_plugins_to_create`   | list of plug-ins to _create_ (see below) | `[]` |
+| `fluentd_gems`                | a list of dict of to manage gems | `[]` |
 | `fluentd_certs_dir`           | path to directory where cert files reside | `{{ __fluentd_config_dir }}/certs` |
 | `fluentd_configs`             | dict of config fragments, see below | {} |
 | `fluentd_ca_key`              | content of `ca_key.pem` | "" |
@@ -98,6 +101,15 @@ for `fluent-plugin-elasticsearch`.
 | `owner`   | the owner of the file, optional                 |
 | `group`   | the group of the file, optional                 |
 | `mode`    | the mode of the file, optional                  |
+
+## `fluentd_gems`
+
+This variable is a list of dict. The dict accepts all keys that
+`community.general.gem` accepts. `name` is required. Other keys are omitted if
+the key does not exist except the following keys.
+
+* `user_install` defaults to `no`
+* `executable` defaults to `fluentd_gem_bin`
 
 ## Debian
 
