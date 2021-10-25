@@ -1,3 +1,7 @@
+## Release 2.1.0
+
+* 407622d feature: add fluentd_gems to manage plugins and gems
+
 ## Release 2.0.1
 
 * dd8155f bugfix: bundle lock x86_64-linux for CI
